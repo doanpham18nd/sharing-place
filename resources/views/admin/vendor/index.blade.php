@@ -24,7 +24,7 @@
                                 <input type="hidden" value="{{csrf_token()}}" name="_token">
                                 <label for="username" class="col-sm-2 control-label">User name</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="username" name="username"
+                                    <input type="email" class="form-control" id="username" name="user_name"
                                            placeholder="Username">
                                 </div>
                             </div>
@@ -38,45 +38,42 @@
                             <div class="form-group">
                                 <label for="inputEmail3" class="col-sm-2 control-label">Tên công ty</label>
                                 <div class="col-sm-10">
-                                    <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+                                    <input type="text" name="vendor_name" class="form-control" id="inputEmail3" placeholder="Email">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="vendor_phone1" class="col-sm-2 control-label">Số điện thoại chính</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="vendor_phone1"
+                                    <input type="text" class="form-control" id="vendor_phone1" name="vendor_phone"
                                            placeholder="số điện thoại chính">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="vendor_phone2" class="col-sm-2 control-label">Số điện thoại phụ</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="vendor_phone2"
+                                    <input type="text" class="form-control" id="vendor_phone2" name="vendor_phone2"
                                            placeholder="">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="vendor_email" class="col-sm-2 control-label">Email công ty</label>
                                 <div class="col-sm-10">
-                                    <input type="email" class="form-control" id="vendor_email"
+                                    <input type="email" class="form-control" id="vendor_email" name="vendor_email"
                                            placeholder="">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="vendor_web" class="col-sm-2 control-label">Trang web công ty</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="vendor_web"
+                                    <input type="text" class="form-control" id="vendor_web" name="vendor_web"
                                            placeholder="">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="official_address" class="col-sm-2 control-label">Ưu tiên liên lạc</label>
+                                <label for="vendor_web" class="col-sm-2 control-label">Số tài khoản công ty</label>
                                 <div class="col-sm-10">
-                                    <select class="form-control" id="official_address">
-                                        <option value="1">Gọi điện</option>
-                                        <option value="2">Gửi mail</option>
-                                        <option value="3">Cả hai</option>
-                                    </select>
+                                    <input type="text" class="form-control" name="vendor_bank" id="vendor_bank"
+                                           placeholder="">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -127,12 +124,6 @@
                             </div>
                             <div class="form-group extra_branch">
                             </div>
-                            {{--<div class="form-group">--}}
-                            {{--<label for="" class="col-sm-2 control-label">Các chi nhánh phụ: </label>--}}
-                            {{--<div class="col-sm-10 extra_branch">--}}
-                            {{--@include('admin.vendor.component.extra-branch')--}}
-                            {{--</div>--}}
-                            {{--</div>--}}
                             <div class="form-group">
                                 <label for="" class="col-sm-2 control-label">
                                     <button type="button" class="btn btn-primary" data-toggle="modal" id="add_extra" data-target="#modal-default">
