@@ -67,7 +67,88 @@
                                     </select>
                                 </div>
                             </div>
-                            @include('admin.demand.component.location')
+                            <div class="form-group">
+                                <label for="official_region" class="col-sm-2 control-label">Địa điểm : </label>
+                                <div class="col-sm-10">
+                                    <div class="form-group">
+                                        <label for="prefecture" class="col-sm-2 control-label">Tỉnh</label>
+                                        <div class="col-sm-10">
+                                            <select class="form-control select2" data-placeholder="Chọn các việc làm"
+                                                    id="province_id" name="province_id[]" style="width: 100%;">
+                                                @foreach($provinces as $province)
+                                                    <option value="{{ $province->id }}">{{ $province->title }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="district" class="col-sm-2 control-label">Huyện</label>
+                                        <div class="col-sm-10">
+                                            <select class="form-control district select2" id="district_id"
+                                                    name="district_id[]">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="address" class="col-sm-2 control-label">Xã</label>
+                                        <div class="col-sm-10">
+                                            <select class="form-control prefecture select2" id="prefecture_id"
+                                                    name="prefecture_id[]">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="address" class="col-sm-2 control-label">Địa chỉ</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" name="address" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="" class="col-sm-2 control-label">Nhu cầu</label>
+                                <div class="col-sm-10">
+                                    <select class="form-control select2" multiple="multiple"
+                                            data-placeholder="Chọn các việc làm"
+                                            name="job_id[][]" style="width: 100%;">
+                                        @foreach($jobs as $job)
+                                            <option value="{{ $job->id }}">{{ $job->job_name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-2 control-label">Thời gian mong muốn</label>
+                                <div class="col-sm-10">
+                                    <div class="form-group">
+                                        <div class="radio" style="padding-left: 19px">
+                                            <label class="col-md-5">
+                                                <input type="radio" value="1" id="config_time1" checked
+                                                       name="config_time[]">Thời
+                                                gian chỉ định
+                                            </label>
+                                            <label class="col-md-6">
+                                                <input type="radio" value="2" id="config_time2" name="config_time[]">Khoảng
+                                                thời gian có thể
+                                            </label>
+                                        </div>
+                                        <div class="checkbox">
+                                            <label class="col-md-3">
+                                                <input type="text" id="specify_time" name="specify_time[]"
+                                                       class="form-control">
+                                            </label>
+                                            <label class="col-md-2"></label>
+                                            <label class="col-md-6">
+                                                <input type="text" id="config_datetime" disabled
+                                                       name="config_datetime[]"
+                                                       class="form-control">
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="add-extra">
+                            </div>
                             <div class="form-group">
                                 <label for="" class="col-sm-2 control-label">
                                     <button type="button" class="btn btn-primary" data-toggle="modal" id="add_extra"
@@ -75,30 +156,6 @@
                                         Thêm chi nhánh phụ
                                     </button>
                                 </label>
-                            </div>
-                            <div class="modal fade bd-example-modal-lg" id="modal-default" tabindex="-1" role="dialog"
-                                 aria-labelledby="myLargeModalLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-lg">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span></button>
-                                            <h4 class="modal-title">Thêm mới chi nhánh phụ</h4>
-                                        </div>
-                                        <div class="modal-body">
-                                            @include('admin.demand.component.result')
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">
-                                                Đóng
-                                            </button>
-                                            <button type="button" id="add_extra_branch" class="btn btn-primary">Thêm mới
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <!-- /.modal-content -->
-                                </div>
-                                <!-- /.modal-dialog -->
                             </div>
                         </div>
                         <!-- /.box-body -->
@@ -108,6 +165,31 @@
                         </div>
                         <!-- /.box-footer -->
                     </form>
+                    <div class="modal fade bd-example-modal-lg" id="modal-default" tabindex="-1" role="dialog"
+                         aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title">Thêm mới chi nhánh phụ</h4>
+                                </div>
+                                <div class="modal-body">
+                                    @include('admin.demand.component.location')
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default pull-left"
+                                            data-dismiss="modal">
+                                        Đóng
+                                    </button>
+                                    <button type="button" id="add_extra_branch" class="btn btn-primary">Thêm mới
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- /.modal-content -->
+                        </div>
+                        <!-- /.modal-dialog -->
+                    </div>
                 </div>
             </div>
             <!--/.col (right) -->
@@ -137,7 +219,7 @@
     <script src="{{ asset('js/admin/pace.min.js') }}"></script>
     <!-- Page script -->
     <script>
-        $(function () {
+        jQuery(window).on('load', function () {
             //Initialize Select2 Elements
             $('.select2').select2();
             var today = new Date();
@@ -158,6 +240,12 @@
                 },
                 minDate: today
             });
+            $('#config_datetime2').daterangepicker({
+                locale: {
+                    format: 'DD/MM/YYYY'
+                },
+                minDate: today
+            });
 
             //Date picker
             $('#specify_time').datepicker({
@@ -171,21 +259,6 @@
                 format: 'dd/mm/yyyy',
                 startDate: '+0d'
             });
-            //iCheck for checkbox and radio inputs
-            $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
-                checkboxClass: 'icheckbox_minimal-blue',
-                radioClass: 'iradio_minimal-blue'
-            })
-            //Red color scheme for iCheck
-            $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
-                checkboxClass: 'icheckbox_minimal-red',
-                radioClass: 'iradio_minimal-red'
-            })
-            //Flat red color scheme for iCheck
-            $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
-                checkboxClass: 'icheckbox_flat-green',
-                radioClass: 'iradio_flat-green'
-            })
 
             //Colorpicker
             $('.my-colorpicker1').colorpicker()
@@ -301,8 +374,133 @@
             $('#config_time2').on('click', function () {
                 $("#specify_time").prop('disabled', true);
                 $("#config_datetime").prop('disabled', false);
-            })
-        })
-        ;
+            });
+            //get thêm vị trí của từng nhu cầu
+            $.ajax({
+                type: "POST",
+                url: url_district,
+                data: {
+                    province_id: province
+                },
+                success: function (response) {
+                    $('.district-extra2').html(response);
+                    var district = $('.district-extra2').val();
+                    var url_prefecture = '{{ route('demand.getPrefecture') }}';
+
+                    $.ajax({
+                        type: "POST",
+                        url: url_prefecture,
+                        data: {
+                            district_id: district
+                        },
+                        success: function (response) {
+                            $('.prefecture-extra2').html(response);
+                        },
+                        failure: function (response) {
+                        },
+                        error: function (response) {
+                        }
+                    });
+                },
+                failure: function (response) {
+                },
+                error: function (response) {
+                }
+            });
+            $('#province_id2').on('change', function () {
+                var province = $(this).val();
+                Pace.restart();
+                Pace.track(function () {
+                    $.ajax({
+                        type: "POST",
+                        url: url_district,
+                        data: {
+                            province_id: province
+                        },
+                        success: function (response) {
+                            $('.district-extra2').html(response);
+                            var district = $('.district-extra2').val();
+                            var url_prefecture = '{{ route('demand.getPrefecture') }}';
+                            $.ajax({
+                                type: "POST",
+                                url: url_prefecture,
+                                data: {
+                                    district_id: district
+                                },
+                                success: function (response) {
+                                    $('.prefecture-extra2').html(response);
+                                },
+                                failure: function (response) {
+                                },
+                                error: function (response) {
+                                }
+                            });
+                        },
+                        failure: function (response) {
+                        },
+                        error: function (response) {
+                        }
+                    });
+                });
+            });
+            $('#district_id2').on('change', function () {
+                var district = $(this).val();
+                var url_prefecture = '{{ route('demand.getPrefecture') }}';
+                Pace.restart();
+                Pace.track(function () {
+                    $.ajax({
+                        type: "POST",
+                        url: url_prefecture,
+                        data: {
+                            district_id: district
+                        },
+                        success: function (response) {
+                            $('.prefecture-extra2').html(response);
+                        },
+                        failure: function (response) {
+                        },
+                        error: function (response) {
+                        }
+                    });
+                });
+            });
+            $('#config_time3').on('click', function () {
+                $("#specify_time2").prop('disabled', false);
+                $("#config_datetime2").prop('disabled', true);
+            });
+            $('#config_time4').on('click', function () {
+                $("#specify_time2").prop('disabled', true);
+                $("#config_datetime2").prop('disabled', false);
+            });
+            //add extra branch on modal
+            $('#add_extra_branch').on('click', function () {
+                var url_add_extra = '{{ route('demand.addExtraAddress') }}';
+                var datastring = $("#extra").serializeArray();
+                var job_id = [];
+                $("#job_id").each(function () {
+                    job_id.push($(this).val());
+                });
+                Pace.restart();
+                Pace.track(function () {
+                    $.ajax({
+                        type: "POST",
+                        url: url_add_extra,
+                        data: {
+                            data: datastring,
+                            job_id: job_id
+                        },
+                        success: function (response) {
+                            $('.add-extra').append(response);
+                            $('.select3').select2();
+                            $('#modal-default').modal('toggle');
+                        },
+                        failure: function (response) {
+                        },
+                        error: function (response) {
+                        }
+                    });
+                });
+            });
+        });
     </script>
 @endsection

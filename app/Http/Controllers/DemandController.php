@@ -103,4 +103,27 @@ class DemandController extends Controller
             return $exception->getMessage();
         }
     }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function addExtra(Request $request)
+    {
+        $demandExtra = $request->only('data')['data'];
+        $jobExtra = $request->only('job_id')['job_id'];
+        foreach ($demandExtra as $key => $demand) {
+            $demands[$demand['name']] = $demand['value'];
+        }
+        $district_selected = $this->districtRepo->findOnlyPublished($demands['district_id']);
+        $prefecture_selected = $this->prefectureRepo->findOnlyPublished($demands['prefecture_id']);
+        $province_selected = $this->provinceRepo->findOnlyPublished($demands['province_id']);
+        $jobs = $this->jobRepo->getAllAvailable();
+        foreach ($jobExtra as $key => $value) {
+            $jobArray = $value;
+        }
+        return view('admin.demand.component.result',
+            compact('district_selected', 'demands', 'prefecture_selected', 'province_selected', 'jobArray', 'jobs'));
+
+    }
 }

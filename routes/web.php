@@ -25,6 +25,7 @@ Route::prefix('demand')->group(function () {
     Route::post('district/get', 'DemandController@getDistrict')->name('demand.getDistrict');
     Route::post('prefecture/get', 'DemandController@getPrefecture')->name('demand.getPrefecture');
     Route::post('add', 'DemandController@postAdd')->name('demand.postAdd');
+    Route::post('/add-extra-demand-address', 'DemandController@addExtra')->name('demand.addExtraAddress');
 });
 Route::prefix('agreement')->group(function () {
     Route::get('add/{demandId?}', 'AgreementController@postAddAgreement')->name('agreement.postAdd');
