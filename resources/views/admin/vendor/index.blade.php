@@ -8,7 +8,14 @@
 @section('content')
     <section class="content">
         <div class="row">
-            <!-- right column -->
+            @if(session()->has('success'))
+                <div class="col-md-12">
+                    <div class="alert alert-success">
+                        {{ session()->get('success') }}
+                    </div>
+                </div>
+        @endif
+        <!-- right column -->
             <div class="col-md-12">
                 <!-- Horizontal Form -->
                 <div class="box box-info">
@@ -38,7 +45,8 @@
                             <div class="form-group">
                                 <label for="inputEmail3" class="col-sm-2 control-label">Tên công ty</label>
                                 <div class="col-sm-10">
-                                    <input type="text" name="vendor_name" class="form-control" id="inputEmail3" placeholder="Email">
+                                    <input type="text" name="vendor_name" class="form-control" id="inputEmail3"
+                                           placeholder="Email">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -126,7 +134,8 @@
                             </div>
                             <div class="form-group">
                                 <label for="" class="col-sm-2 control-label">
-                                    <button type="button" class="btn btn-primary" data-toggle="modal" id="add_extra" data-target="#modal-default">
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" id="add_extra"
+                                            data-target="#modal-default">
                                         Thêm chi nhánh phụ
                                     </button>
                                 </label>
@@ -293,7 +302,7 @@
                     });
                 });
             });
-            
+
             //add extra branch on modal
             $('#add_extra_branch').on('click', function () {
                 var url_add_extra = '{{ route('vendor.addExtraVendorInfo') }}';

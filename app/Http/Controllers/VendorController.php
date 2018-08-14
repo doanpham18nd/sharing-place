@@ -96,6 +96,7 @@ class VendorController extends Controller
                 }
             });
             DB::commit();
+            return redirect()->back()->with('success', 'Đã đăng ký thành công.Vui lòng chờ Admin xác nhận!');
         } catch (\Exception $exception) {
             DB::rollBack();
             return $exception->getMessage();
