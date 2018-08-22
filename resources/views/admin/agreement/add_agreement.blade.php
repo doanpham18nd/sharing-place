@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="{{ asset('css/admin/bootstrap-timepicker.min.css') }}">
     <!-- Select2 -->
     <link rel="stylesheet" href="{{ asset('css/admin/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin/pace.min.css') }}">
 @endsection
 @section('content')
     <section class="content">
@@ -22,6 +23,8 @@
                     <!-- /.box-header -->
                     <!-- form start -->
                     <form class="form-horizontal" method="post" action="{{ route('bill.getAdd', $demand->id) }}">
+                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        <meta name="csrf-token" content="{{ csrf_token() }}">
                         <div class="box-body">
                             <div class="form-group">
                                 <h2 class="red-text text-center font-weight-bold">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT
@@ -35,23 +38,31 @@
                             <div class="col-md-6">
                                 <div class="box-header with-border">
                                     <h3 class="box-title font-weight-bold" style="font-weight: bold">THÔNG TIN NGƯỜI
-                                        DÙNG</h3>
+                                        DÙNG(BÊN A)</h3>
                                 </div>
                                 <table class="table table-striped">
                                     <tbody>
                                     <tr>
                                         <td>Tên khách hàng :</td>
-                                        <td>{{ $demand->client->user_name }}</td>
+                                        <td>{{ $demand->client->client_name }}</td>
                                     </tr>
                                     <tr>
                                         <td>Số điện thoại :</td>
-                                        <td>{{ $demand->client->user_phone1 }}</td>
+                                        <td>0{{ $demand->client->client_phone }}</td>
                                     </tr>
                                     <tr>
                                         <td>Địa chỉ :</td>
-                                        <td>{{ $demand->client->address }}
-                                            -{{ $demand->client->prefecture->title }}
-                                            -{{ $demand->client->province->title }}</td>
+                                        <td>{{ $demand->address }}-{{ $demand->prefecture->name }}
+                                            -{{ $demand->district->title }}-{{ $demand->province->title }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Nhu cầu</td>
+                                        <td>
+                                            @foreach($demand->demandDetails as $demandDetail)
+                                                - {{ $demandDetail->job->job_name }}
+                                                <br>
+                                            @endforeach
+                                        </td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -59,98 +70,32 @@
                             <div class="col-md-6">
                                 <div class="box-header with-border">
                                     <h3 class="box-title font-weight-bold" style="font-weight: bold">THÔNG TIN DOANH
-                                        NGHIỆP</h3>
+                                        NGHIỆP(BÊN B)</h3>
                                 </div>
                                 <table class="table table-striped">
                                     <tbody>
                                     <tr>
                                         <td>Tên công ty :</td>
-                                        <td><select class="form-control select2" name="vendor_id"
+                                        <td><select class="form-control select2" name="vendor_id" id="vendor_id"
                                                     data-placeholder="Chọn các việc làm">
                                                 @foreach($vendors as $vendor)
                                                     <option value="{{ $vendor->id }}">{{ $vendor->vendor_name }}</option>
                                                 @endforeach
-                                            </select></td>
-                                    </tr>
-                                    <tr>
-                                        <td>July</td>
-                                        <td>Dooley</td>
+                                            </select>
+                                        </td>
                                     </tr>
                                     </tbody>
+                                    <tbody id="get_vendor">
+                                    </tbody>
                                 </table>
-                                <div class="form-group">
-                                    <label for="vendor_phone2" class="col-sm-2 control-label">Danh sách việc cần
-                                        làm</label>
-                                    <div class="col-sm-10">
-                                        <label class="control-label">
-                                            @php
-                                                $demandName = '';
-                                                $demandPriceTotal = 0;
-                                                    foreach ($demand->demandDetails as $demandDetail) {
-                                                    $demandName .= '-' . $demandDetail->job->job_name;
-                                                    $demandPriceTotal += $demandDetail->job->job_price;
-                                                    }
-                                            @endphp
-                                            {{ $demandName }}
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="vendor_phone2" class="col-sm-2 control-label">Tổng tiền</label>
-                                    <div class="col-sm-10">
-                                        <label class="control-label">{{ number_format($demandPriceTotal) }} VNĐ</label>
-                                        <input type="hidden" name="total_price" value="{{ $demandPriceTotal }}">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="vendor_email" class="col-sm-2 control-label">Công ty đảm nhiệm</label>
-                                    <div class="col-sm-10">
-                                        <select class="form-control select2" name="vendor_id"
-                                                data-placeholder="Chọn các việc làm">
-                                            @foreach($vendors as $vendor)
-                                                <option value="{{ $vendor->id }}">{{ $vendor->vendor_name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="official_address" class="col-sm-2 control-label">Người tạo hợp
-                                        đồng</label>
-                                    <div class="col-sm-10">
-                                        <label class="control-label">Admin</label>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="official_address" class="col-sm-2 control-label">Ngày tạo hợp
-                                        đồng</label>
-                                    <div class="col-sm-10">
-                                        <label class="control-label">{{ date_format($demand->created_at, 'd/m/Y - H:i') }}</label>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="working_time" class="col-sm-2 control-label">Thời gian đảm nhận</label>
-                                    <div class="col-sm-10">
-                                        <label class="control-label">
-                                            @if($demand->specify_time == 1)
-                                                {{ $demand->specify_datetime }}
-                                            @else
-                                                {{ $demand->config_datetime1}} ~ {{ $demand->config_datetime2 }}
-                                            @endif
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="working_time" class="col-sm-2 control-label">Trạng thái hợp đồng</label>
-                                    <div class="col-sm-10">
-                                        <label class="control-label">Chưa được xác nhận</label>
-                                        <input type="hidden" value="0" name="agreement_status">
-                                    </div>
-                                </div>
                             </div>
                             <br>
+                        </div>
+                        <div class="box-body">
                             <div class="col-md-12">
                                 <div class="box-header with-border">
-                                    <h3 class="box-title font-weight-bold" style="font-weight: bold">CHI TIẾT CÔNG VIỆC</h3>
+                                    <h3 class="box-title font-weight-bold" style="font-weight: bold">CHI TIẾT CÔNG
+                                        VIỆC</h3>
                                 </div>
                                 <table class="table table-bordered">
                                     <thead>
@@ -182,6 +127,106 @@
                                         <td colspan="2"></td>
                                         <td><span style="float: right;">Tổng tiền</span></td>
                                         <td>{{ number_format($demandPriceTotal) }} VNĐ</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <div class="col-md-12">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title font-weight-bold" style="font-weight: bold">THỜI GIAN SỬA
+                                        CHỮA</h3>
+                                </div>
+                                <table class="table table-bordered">
+                                    <tbody>
+                                    <tr>
+                                        <td>1. Bên B có trách nhiệm hoàn tất việc sửa chữa trong thời hạn là
+                                            @if(!empty($demand->specify_time))
+                                                Trong ngày
+                                                : {{ \Carbon\Carbon::parse($demand->specify_time)->format('d-m-Y') }}
+                                            @elseif(!empty($demand->start_date) && !empty($demand->end_date))
+                                                {{ \Carbon\Carbon::parse($demand->start_date)->format('d-m-Y') . ' đến ngày ' . \Carbon\Carbon::parse($demand->end_date)->format('d-m-Y')}}
+                                                .
+                                            @endif
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            2. Nếu có khó khăn về vật tư hoặc gặp hoàn cảnh đột xuất không thể khắc phục
+                                            thì Bên B báo cho Bên A xin kéo dài thêm một thời gian cần thiết,
+                                            nếu Bên A không được thông báo Bên B giao nghiệm thu chậm, coi như vi phạm
+                                            hợp đồng.
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <div class="col-md-12">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title font-weight-bold" style="font-weight: bold">NGHIỆM THU(NẾU
+                                        CÓ)</h3>
+                                </div>
+                                <table class="table table-bordered">
+                                    <tbody>
+                                    <tr>
+                                        <td>1. Bên A có quyền mời cơ quan giám định chuyên môn hoặc chuyên gia giúp cho
+                                            mình kiểm tra chất lượng sửa chữa vào thành phần ban nghiệm thu.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            2. Giúp Bên B có trách nhiệm chuẩn bị các điều kiện cho hoạt động nghiệm thu
+                                            theo 2 đợt,
+                                            đợt 1 khi đạt 50% giá trị hợp đồng và đợt 2 khi hoàn tất (nếu công việc đơn
+                                            giản, thực hiện trong thời gian ngắn thì nghiệm thu một lần).
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <div class="col-md-12">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title font-weight-bold" style="font-weight: bold">BÀO HÀNH</h3>
+                                </div>
+                                <table class="table table-bordered">
+                                    <tbody>
+                                    <tr>
+                                        <td>1. Thời gian bảo hành kết quả sửa chữa
+                                            ...................................... (tháng, năm)
+                                            <br><br>
+                                            Lưu ý: Việc bảo hành có thể dựa theo quy định của Nhà nước, nếu không có thì
+                                            hai bên tự thỏa thun.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            2. Trong thời hạn bảo hành nếu Bên A phát hiện có hư hỏng, sai sót về chất
+                                            lượng, về kỹ thuật thì phải thông báo kịp thời bằng văn bản cho Bên B biết
+                                            để cùng nhau xác minh. Việc xác minh phải được tiến hành không chậm quá 15
+                                            ngày kể từ ngày nhận được thông báo. Việc xác minh phải được lập thành biên
+                                            bản. Hai bên có kết luận rõ ràng về nguyên nhân gây ra hư hỏng, xác định
+                                            trách nhiệm sửa chữa các hư hỏng đó thuộc về bên nào, quy định thời gian sửa
+                                            chữa.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            3. Trong thời hạn 15 ngày kể từ ngày nhận được thông báo, nếu Bên B không
+                                            trả lời thì coi như đã chấp thuận có sai sót và có trách nhiệm sửa chữa sai
+                                            sót đó.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>4. Nếu sai sót không được sửa chữa hoặc việc sửa chữa kéo dài dẫn đến những
+                                            thiệt hại khác trong kế hoạch sử dụng máy thì Bên A có quyền phạt bên B vi
+                                            phạm hợp đồng là 10 % giá trị bộ phận hư hỏng và bắt bồi thường thiệt
+                                            hại như trường hợp không thực hiện hợp đồng.
+                                        </td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -220,6 +265,7 @@
     <script src="{{ asset('js/admin/icheck.min.js') }}"></script>
     <!-- FastClick -->
     <script src="{{ asset('js/admin/fastclick.js') }}"></script>
+    <script src="{{ asset('js/admin/pace.min.js') }}"></script>
     <!-- Page script -->
     <script>
         $(function () {
@@ -232,55 +278,6 @@
             $('#datemask2').inputmask('mm/dd/yyyy', {'placeholder': 'mm/dd/yyyy'})
             //Money Euro
             $('[data-mask]').inputmask()
-
-            //Date range picker
-            $('#reservation').daterangepicker()
-            //Date range picker with time picker
-            $('#reservationtime').daterangepicker({
-                timePicker: true,
-                timePickerIncrement: 30,
-                format: 'MM/DD/YYYY h:mm A'
-            })
-            //Date range as a button
-            $('#daterange-btn').daterangepicker(
-                {
-                    ranges: {
-                        'Today': [moment(), moment()],
-                        'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                        'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-                        'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-                        'This Month': [moment().startOf('month'), moment().endOf('month')],
-                        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-                    },
-                    startDate: moment().subtract(29, 'days'),
-                    endDate: moment()
-                },
-                function (start, end) {
-                    $('#daterange-btn span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
-                }
-            )
-
-            //Date picker
-            $('#datepicker').datepicker({
-                autoclose: true
-            })
-
-            //iCheck for checkbox and radio inputs
-            $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
-                checkboxClass: 'icheckbox_minimal-blue',
-                radioClass: 'iradio_minimal-blue'
-            })
-            //Red color scheme for iCheck
-            $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
-                checkboxClass: 'icheckbox_minimal-red',
-                radioClass: 'iradio_minimal-red'
-            })
-            //Flat red color scheme for iCheck
-            $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
-                checkboxClass: 'icheckbox_flat-green',
-                radioClass: 'iradio_flat-green'
-            })
-
             //Colorpicker
             $('.my-colorpicker1').colorpicker()
             //color picker with addon
@@ -290,6 +287,30 @@
             $('.timepicker').timepicker({
                 showInputs: false
             })
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            var url_vendor = '{{ route('agreement.getVendor')}}';
+            var vendor = $('#vendor_id').val();
+            Pace.restart();
+            Pace.track(function () {
+                $.ajax({
+                    type: "POST",
+                    url: url_vendor,
+                    data: {
+                        vendor_id: vendor
+                    },
+                    success: function (response) {
+                        $('#get_vendor').html(response);
+                    },
+                    failure: function (response) {
+                    },
+                    error: function (response) {
+                    }
+                });
+            });
         })
     </script>
 @endsection

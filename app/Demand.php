@@ -23,4 +23,24 @@ class Demand extends Model
     {
         return $this->belongsTo('App\Client', 'client_id' , 'id');
     }
+
+    public function province()
+    {
+        return $this->belongsTo('App\Province', 'province_id', 'id');
+    }
+
+    public function prefecture()
+    {
+        return $this->belongsTo('App\Prefecture');
+    }
+
+    public function district()
+    {
+        return $this->belongsTo('App\District');
+    }
+
+    public function job()
+    {
+        return $this->belongsTo('App\Job');
+    }
 }

@@ -43,6 +43,12 @@ class DemandController extends Controller
         $this->districtRepo = $districtRepository;
     }
 
+    public function getList()
+    {
+        $demandListToday = $this->demandRepo->getDemandToday();
+        return view('admin.demand.list', compact('demandListToday'));
+    }
+
     public function index(Request $request)
     {
         $phone = '';
@@ -73,31 +79,36 @@ class DemandController extends Controller
     {
         try {
             DB::beginTransaction();
-            $clients = $request->only(
-                'user_name',
-                'user_phone1',
-                'user_phone2',
-                'user_email',
-                'province_id', 'prefecture_id', 'district_id', 'contact_method');
+            $clients = $request->only('client_name', 'client_phone', 'client_phone2', 'email', 'contact_method');
             $clients['created_at'] = Carbon::now();
             $clients['updated_at'] = Carbon::now();
             $clientId = $this->clientRepo->insertGetId($clients);
-            $demands = $request->only('specify_time', 'specify_datetime', 'config_time	', 'config_datetime1', 'config_datetime2');
-            $demands['client_id'] = $clientId;
-            $demands['created_at'] = Carbon::now();
-            $demands['updated_at'] = Carbon::now();
-            $demandId = $this->demandRepo->insertGetId($demands);
-            if (!empty($request->job_id)) {
-                foreach ($request->job_id as $value) {
-                    $demandDetails['job_id'] = $value;
-                    $demandDetails['demand_id'] = $demandId;
-                    $demandDetails['created_at'] = Carbon::now();
-                    $demandDetails['updated_at'] = Carbon::now();
-                    $this->demandDetailRepo->insert($demandDetails);
+            foreach ($request->province_id as $key => $provinceId) {
+                $demand['province_id'] = $provinceId;
+                $demand['district_id'] = $request->district_id[$key];
+                $demand['prefecture_id'] = $request->prefecture_id[$key];
+                $demand['address'] = $request->address[$key];
+                $demand['config_time'] = $request->config_time[$key];
+                $demand['specify_time'] = $request->specify_time[$key];
+                if (!empty($request->config_datetime[$key])) {
+                    $configDateTime = explode("-",$request->config_datetime[$key]);
+                    $demand['start_date'] = $configDateTime[0];
+                    $demand['end_date'] = $configDateTime[1];
+                }
+                $demand['client_id'] = $clientId;
+                $demand['created_at'] = Carbon::now();
+                $demand['updated_at'] = Carbon::now();
+                $demandId = $this->demandRepo->insertGetId($demand);
+                foreach ($request->job_id[$key] as $job) {
+                    $demandDetail['job_id'] = $job;
+                    $demandDetail['demand_id'] = $demandId;
+                    $demandDetail['created_at'] = Carbon::now();
+                    $demandDetail['updated_at'] = Carbon::now();
+                    $this->demandDetailRepo->insert($demandDetail);
                 }
             }
             DB::commit();
-            return redirect()->route('agreement.postAdd', $demandId)->with('success', 'Tạo mới thành công nhu cầu!');
+            return redirect()->route('demand.index')->with('success', 'Tạo mới thành công nhu cầu!');
         } catch (\Exception $exception) {
             DB::rollBack();
             return $exception->getMessage();
@@ -110,6 +121,7 @@ class DemandController extends Controller
      */
     public function addExtra(Request $request)
     {
+        $stt = $request->only('stt')['stt'];
         $demandExtra = $request->only('data')['data'];
         $jobExtra = $request->only('job_id')['job_id'];
         foreach ($demandExtra as $key => $demand) {
@@ -123,7 +135,7 @@ class DemandController extends Controller
             $jobArray = $value;
         }
         return view('admin.demand.component.result',
-            compact('district_selected', 'demands', 'prefecture_selected', 'province_selected', 'jobArray', 'jobs'));
+            compact('district_selected', 'demands', 'prefecture_selected', 'province_selected', 'jobArray', 'jobs', 'stt'));
 
     }
 }

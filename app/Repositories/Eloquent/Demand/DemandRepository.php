@@ -35,10 +35,18 @@ class DemandRepository extends EloquentRepository implements DemandRepositoryInt
      */
     public function findOnlyPublished($id)
     {
-        $result = $this->model->with('client.province')
-            ->where('id', $id)
-            ->where('demands.del_flg', 1)->first();
+        $result = $this->model->where('id', $id)->where('demands.del_flg', 1)->first();
 
+        return $result;
+    }
+
+    public function getDemandToday()
+    {
+        $result = $this->model->with('client')->with('province')->where('specify_time' ,date('Y-m-d'))
+            ->orWhere(function ($query) {
+                $query->where('start_date','<=', date('Y-m-d'))->where('end_date', '>=', date('Y-m-d'));
+            })->where('status', 1)
+            ->get();
         return $result;
     }
 

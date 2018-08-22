@@ -44,4 +44,14 @@ class VendorRepository extends EloquentRepository implements VendorRepositoryInt
         return $result;
     }
 
+    public function getByAddress($data)
+    {
+        return $this->model->where([
+                ['province_id', $data['province_id']],
+                ['district_id', $data['district_id']],
+                ['prefecture_id', $data['prefecture_id']],
+            ]
+        )->get();
+    }
+
 }

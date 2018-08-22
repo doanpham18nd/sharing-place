@@ -37,7 +37,13 @@ class AgreementController extends Controller
     public function postAddAgreement($demandId)
     {
         $demand = $this->demandRepo->findOnlyPublished($demandId);
-        $vendors = $this->vendorRepo->getAllPublished();
-        return view('admin.agreement.add_agreement', compact('demand' , 'vendors'));
+        $vendors = $this->vendorRepo->getByAddress($demand);
+        return view('admin.agreement.add_agreement', compact('demand', 'vendors'));
+    }
+
+    public function getVendor(Request $request)
+    {
+        $vendor = $this->vendorRepo->findOnlyPublished($request->vendor_id);
+        return view('admin.agreement.component.vendor', compact('vendor'));
     }
 }

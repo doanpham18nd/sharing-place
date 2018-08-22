@@ -21,6 +21,7 @@ Route::prefix('company')->group(function () {
     Route::post('/get-extra', 'VendorController@getExtra')->name('vendor.getExtra');
 });
 Route::prefix('demand')->group(function () {
+    Route::get('/list', 'DemandController@getList')->name('demand.list');
     Route::get('/{user_phone?}', 'DemandController@index')->name('demand.index');
     Route::post('district/get', 'DemandController@getDistrict')->name('demand.getDistrict');
     Route::post('prefecture/get', 'DemandController@getPrefecture')->name('demand.getPrefecture');
@@ -29,6 +30,7 @@ Route::prefix('demand')->group(function () {
 });
 Route::prefix('agreement')->group(function () {
     Route::get('add/{demandId?}', 'AgreementController@postAddAgreement')->name('agreement.postAdd');
+    Route::post('get-vendor', 'AgreementController@getVendor')->name('agreement.getVendor');
 });
 Route::prefix('region')->group(function () {
     Route::get('/', 'RegionController@index')->name('region.index');

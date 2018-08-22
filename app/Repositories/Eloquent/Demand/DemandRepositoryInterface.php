@@ -25,4 +25,6 @@ interface DemandRepositoryInterface
      */
     public function findOnlyPublished($id);
 
+    public function getDemandToday();
+
 }

@@ -25,4 +25,5 @@ interface VendorRepositoryInterface
      */
     public function findOnlyPublished($id);
 
+    public function getByAddress($data);
 }

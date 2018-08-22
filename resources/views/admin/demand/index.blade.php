@@ -100,7 +100,7 @@
                                     <div class="form-group">
                                         <label for="address" class="col-sm-2 control-label">Địa chỉ</label>
                                         <div class="col-sm-10">
-                                            <input type="text" name="address" class="form-control">
+                                            <input type="text" name="address[]" class="form-control">
                                         </div>
                                     </div>
                                 </div>
@@ -110,7 +110,7 @@
                                 <div class="col-sm-10">
                                     <select class="form-control select2" multiple="multiple"
                                             data-placeholder="Chọn các việc làm"
-                                            name="job_id[][]" style="width: 100%;">
+                                            name="job_id[0][]" style="width: 100%;">
                                         @foreach($jobs as $job)
                                             <option value="{{ $job->id }}">{{ $job->job_name }}</option>
                                         @endforeach
@@ -161,7 +161,7 @@
                         <!-- /.box-body -->
                         <div class="box-footer">
                             <button type="submit" class="btn btn-default">Hủy</button>
-                            <button type="submit" class="btn btn-info pull-right">Lưu</button>
+                            <button type="submit" class="btn btn-info pull-right add-demand">Lưu</button>
                         </div>
                         <!-- /.box-footer -->
                     </form>
@@ -232,19 +232,34 @@
             if (mm < 10) {
                 mm = '0' + mm
             }
-            var today = dd + '/' + mm + '/' + yyyy;
-            //Date range picker
             $('#config_datetime').daterangepicker({
+                autoUpdateInput: false,
                 locale: {
-                    format: 'DD/MM/YYYY'
-                },
-                minDate: today
+                    cancelLabel: 'Clear'
+                }
             });
+
+            $('#config_datetime').on('apply.daterangepicker', function(ev, picker) {
+                $(this).val(picker.startDate.format('YYYY/MM/DD') + ' - ' + picker.endDate.format('YYYY/MM/DD'));
+            });
+
+            $('#config_datetime').on('cancel.daterangepicker', function(ev, picker) {
+                $(this).val('');
+            });
+
             $('#config_datetime2').daterangepicker({
+                autoUpdateInput: false,
                 locale: {
-                    format: 'DD/MM/YYYY'
-                },
-                minDate: today
+                    cancelLabel: 'Clear'
+                }
+            });
+
+            $('#config_datetime2').on('apply.daterangepicker', function(ev, picker) {
+                $(this).val(picker.startDate.format('YYYY/MM/DD') + ' - ' + picker.endDate.format('YYYY/MM/DD'));
+            });
+
+            $('#config_datetime2').on('cancel.daterangepicker', function(ev, picker) {
+                $(this).val('');
             });
 
             //Date picker
@@ -275,6 +290,7 @@
                 }
             });
             var url_district = '{{ route('demand.getDistrict') }}';
+            var stt = 1;
             var province = $('#province_id').val();
             Pace.restart();
             Pace.track(function () {
@@ -375,6 +391,14 @@
                 $("#specify_time").prop('disabled', true);
                 $("#config_datetime").prop('disabled', false);
             });
+            $('#config_time3').on('click', function () {
+                $("#specify_time2").prop('disabled', false);
+                $("#config_datetime2").prop('disabled', true);
+            });
+            $('#config_time4').on('click', function () {
+                $("#specify_time2").prop('disabled', true);
+                $("#config_datetime2").prop('disabled', false);
+            });
             //get thêm vị trí của từng nhu cầu
             $.ajax({
                 type: "POST",
@@ -465,18 +489,19 @@
                 });
             });
             $('#config_time3').on('click', function () {
-                $("#specify_time2").prop('disabled', false);
-                $("#config_datetime2").prop('disabled', true);
+                $("#specify_time2").prop('readonly', false);
+                $("#config_datetime2").prop('readonly', true);
             });
             $('#config_time4').on('click', function () {
-                $("#specify_time2").prop('disabled', true);
-                $("#config_datetime2").prop('disabled', false);
+                $("#specify_time2").prop('readonly', true);
+                $("#config_datetime2").prop('readonly', false);
             });
             //add extra branch on modal
             $('#add_extra_branch').on('click', function () {
                 var url_add_extra = '{{ route('demand.addExtraAddress') }}';
                 var datastring = $("#extra").serializeArray();
                 var job_id = [];
+                var stt2 = stt++;
                 $("#job_id").each(function () {
                     job_id.push($(this).val());
                 });
@@ -487,7 +512,8 @@
                         url: url_add_extra,
                         data: {
                             data: datastring,
-                            job_id: job_id
+                            job_id: job_id,
+                            stt: stt2
                         },
                         success: function (response) {
                             $('.add-extra').append(response);
@@ -501,6 +527,11 @@
                     });
                 });
             });
+            $('.add-demand').on('click', function () {
+                $('.multi-job').removeAttr('disabled');
+                $('#specify_time').removeAttr('disabled');
+                $('#config_datetime').removeAttr('disabled');
+            })
         });
     </script>
 @endsection
