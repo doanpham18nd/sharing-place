@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th8 14, 2018 lúc 11:44 AM
+-- Thời gian đã tạo: Th8 22, 2018 lúc 07:03 AM
 -- Phiên bản máy phục vụ: 10.1.33-MariaDB
 -- Phiên bản PHP: 7.1.18
 
@@ -97,16 +97,21 @@ CREATE TABLE `clients` (
   `id` int(10) UNSIGNED NOT NULL,
   `client_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `client_phone` int(11) NOT NULL,
-  `client_phone2` int(11) NOT NULL,
+  `client_phone2` int(11) DEFAULT NULL,
   `email` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `contact_method` int(11) NOT NULL,
-  `province_id` int(11) NOT NULL,
-  `district_id` int(11) NOT NULL,
-  `prefecture_id` int(11) NOT NULL,
   `del_flg` tinyint(4) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `clients`
+--
+
+INSERT INTO `clients` (`id`, `client_name`, `client_phone`, `client_phone2`, `email`, `contact_method`, `del_flg`, `created_at`, `updated_at`) VALUES
+(11, 'Phạm Văn Đoàn', 1668718567, 1668718566, 'doanpham94nd@gmail.com', 3, 1, '2018-08-15 19:34:51', '2018-08-15 19:34:51'),
+(12, 'Phạm Văn B', 1668718567, NULL, 'doancaptain@gmail.com', 1, 1, '2018-08-15 19:54:54', '2018-08-15 19:54:54');
 
 -- --------------------------------------------------------
 
@@ -130,16 +135,31 @@ CREATE TABLE `communes` (
 
 CREATE TABLE `demands` (
   `id` int(10) UNSIGNED NOT NULL,
+  `province_id` int(11) NOT NULL,
+  `district_id` int(11) NOT NULL,
+  `prefecture_id` int(11) NOT NULL,
+  `address` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `client_id` int(11) NOT NULL,
-  `price_total` int(13) NOT NULL,
-  `config_time` tinyint(2) NOT NULL DEFAULT '1',
+  `price_total` int(13) DEFAULT NULL,
+  `config_time` tinyint(2) NOT NULL,
+  `start_date` date DEFAULT NULL,
+  `end_date` date DEFAULT NULL,
+  `status` tinyint(2) NOT NULL DEFAULT '1',
   `del_flg` tinyint(4) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `specify_time` datetime NOT NULL,
-  `start_time` datetime NOT NULL,
-  `end_time` datetime NOT NULL
+  `specify_time` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `demands`
+--
+
+INSERT INTO `demands` (`id`, `province_id`, `district_id`, `prefecture_id`, `address`, `client_id`, `price_total`, `config_time`, `start_date`, `end_date`, `status`, `del_flg`, `created_at`, `updated_at`, `specify_time`) VALUES
+(3, 1, 1, 1, '32 Phúc Xá', 11, NULL, 2, '2018-08-16', '2018-08-17', 1, 1, '2018-08-15 19:34:51', '2018-08-15 19:34:51', NULL),
+(4, 1, 2, 37, '32 Phúc Tân', 11, NULL, 1, NULL, NULL, 1, 1, '2018-08-15 19:34:51', '2018-08-15 19:34:51', '2018-08-16'),
+(5, 1, 1, 1, '32 Phúc Xá', 12, NULL, 1, NULL, NULL, 1, 1, '2018-08-15 19:54:54', '2018-08-15 19:54:54', '2018-08-16'),
+(6, 1, 1, 1, '32 Phúc Xá', 12, NULL, 2, '2018-08-16', '2018-08-17', 1, 1, '2018-08-15 19:54:54', '2018-08-15 19:54:54', NULL);
 
 -- --------------------------------------------------------
 
@@ -149,9 +169,25 @@ CREATE TABLE `demands` (
 
 CREATE TABLE `demand_details` (
   `id` int(10) UNSIGNED NOT NULL,
+  `demand_id` int(11) NOT NULL,
+  `job_id` int(11) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `demand_details`
+--
+
+INSERT INTO `demand_details` (`id`, `demand_id`, `job_id`, `created_at`, `updated_at`) VALUES
+(5, 3, 1, '2018-08-15 19:34:51', '2018-08-15 19:34:51'),
+(6, 3, 2, '2018-08-15 19:34:51', '2018-08-15 19:34:51'),
+(7, 4, 1, '2018-08-15 19:34:51', '2018-08-15 19:34:51'),
+(8, 4, 2, '2018-08-15 19:34:51', '2018-08-15 19:34:51'),
+(9, 5, 1, '2018-08-15 19:54:54', '2018-08-15 19:54:54'),
+(10, 5, 2, '2018-08-15 19:54:54', '2018-08-15 19:54:54'),
+(11, 6, 1, '2018-08-15 19:54:54', '2018-08-15 19:54:54'),
+(12, 6, 2, '2018-08-15 19:54:54', '2018-08-15 19:54:54');
 
 -- --------------------------------------------------------
 
@@ -895,7 +931,7 @@ CREATE TABLE `jobs` (
   `job_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `job_price` int(11) NOT NULL,
   `job_price_holiday` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `del_flg` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `del_flg` int(1) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -905,8 +941,8 @@ CREATE TABLE `jobs` (
 --
 
 INSERT INTO `jobs` (`id`, `job_name`, `job_price`, `job_price_holiday`, `del_flg`, `created_at`, `updated_at`) VALUES
-(1, 'Sửa mạng', 300000, '450000', '1', '2018-08-07 02:46:15', '2018-08-07 02:46:15'),
-(2, 'Cài win dạo', 100000, '120000', '1', '2018-08-07 02:47:38', '2018-08-07 02:47:38');
+(1, 'Sửa mạng', 300000, '450000', 1, '2018-08-07 02:46:15', '2018-08-07 02:46:15'),
+(2, 'Cài win dạo', 100000, '120000', 1, '2018-08-07 02:47:38', '2018-08-07 02:47:38');
 
 -- --------------------------------------------------------
 
@@ -12247,6 +12283,7 @@ CREATE TABLE `vendors` (
   `district_id` int(11) NOT NULL,
   `prefecture_id` int(11) NOT NULL,
   `vendor_bank` int(20) DEFAULT NULL,
+  `bank_name` varchar(222) COLLATE utf8mb4_unicode_ci NOT NULL,
   `address` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `price_total` int(30) DEFAULT NULL,
   `status` int(11) DEFAULT '1',
@@ -12259,9 +12296,9 @@ CREATE TABLE `vendors` (
 -- Đang đổ dữ liệu cho bảng `vendors`
 --
 
-INSERT INTO `vendors` (`id`, `vendor_name`, `user_name`, `password`, `vendor_phone`, `vendor_email`, `vendor_web`, `province_id`, `district_id`, `prefecture_id`, `vendor_bank`, `address`, `price_total`, `status`, `del_flg`, `created_at`, `updated_at`) VALUES
-(4, 'Công ty cài win dạo', 'doanpham94nd@gmail.com', '$2y$10$fvWWX8uZqYAfvz2EXeyToOc59NpDXl4GiQpvodvrb//BgU6LteK3O', NULL, 'doanpham94nd@gmail.com', 'google.com', 1, 1, 1, 242914099, 'Số 32 Phúc Xá', 2000000000, 1, 1, '2018-08-13 00:07:35', '2018-08-13 00:07:35'),
-(5, 'Công ty sửa chữa phần mềm cao cấp', 'yaphetsss.94@gmail.com', '$2y$10$UqB84.lKRXCm919HTQUkYeyPcSEpRjr0KNs5zbB.r0hSEd.gXpFTe', NULL, 'doanpham94nd@gmail.com', 'google.com', 1, 1, 1, 242914099, 'Số 32 Phúc Xá', 2000000000, 1, 1, '2018-08-13 00:48:45', '2018-08-13 00:48:45');
+INSERT INTO `vendors` (`id`, `vendor_name`, `user_name`, `password`, `vendor_phone`, `vendor_email`, `vendor_web`, `province_id`, `district_id`, `prefecture_id`, `vendor_bank`, `bank_name`, `address`, `price_total`, `status`, `del_flg`, `created_at`, `updated_at`) VALUES
+(4, 'Công ty cài win dạo', 'doanpham94nd@gmail.com', '$2y$10$fvWWX8uZqYAfvz2EXeyToOc59NpDXl4GiQpvodvrb//BgU6LteK3O', 1668718567, 'doanpham94nd@gmail.com', 'google.com', 1, 1, 1, 242914099, 'ACB', 'Số 32 Phúc Xá', 2000000000, 1, 1, '2018-08-13 00:07:35', '2018-08-13 00:07:35'),
+(5, 'Công ty sửa chữa phần mềm cao cấp', 'yaphetsss.94@gmail.com', '$2y$10$UqB84.lKRXCm919HTQUkYeyPcSEpRjr0KNs5zbB.r0hSEd.gXpFTe', 1668718567, 'doanpham94nd@gmail.com', 'google.com', 1, 1, 1, 242914099, 'VCB', 'Số 32 Phúc Xá', 2000000000, 1, 1, '2018-08-13 00:48:45', '2018-08-13 00:48:45');
 
 -- --------------------------------------------------------
 
@@ -12447,7 +12484,7 @@ ALTER TABLE `bill_details`
 -- AUTO_INCREMENT cho bảng `clients`
 --
 ALTER TABLE `clients`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT cho bảng `communes`
@@ -12459,13 +12496,13 @@ ALTER TABLE `communes`
 -- AUTO_INCREMENT cho bảng `demands`
 --
 ALTER TABLE `demands`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT cho bảng `demand_details`
 --
 ALTER TABLE `demand_details`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT cho bảng `demand_prices`
