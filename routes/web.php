@@ -47,3 +47,10 @@ Route::prefix('bill')->group(function () {
     Route::get('edit/{id}', 'BillController@getEdit')->name('bill.getEdit');
     Route::post('edit/{id}', 'BillController@postEdit')->name('bill.postEdit');
 });
+Route::prefix('vendor')->group(function () {
+    Route::get('/', 'VendorController@index')->name('vendor.index');
+    Route::get('confirm-agreement/{demandId}', 'VendorController@confirmAgreement')->name('vendor.confirm');
+    Route::post('add/{demandId}', 'BillController@postAdd')->name('bill.postAdd');
+    Route::get('edit/{id}', 'BillController@getEdit')->name('bill.getEdit');
+    Route::post('edit/{id}', 'BillController@postEdit')->name('bill.postEdit');
+});

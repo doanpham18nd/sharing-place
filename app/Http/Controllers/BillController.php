@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\OrderShipped;
+use App\Mail\AgreementMail;
 use App\Repositories\Eloquent\Bill\BillRepositoryInterface;
 use App\Repositories\Eloquent\Demand\DemandRepositoryInterface;
+use App\Repositories\Eloquent\Vendor\VendorRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
@@ -13,28 +14,23 @@ class BillController extends Controller
 {
     protected $billRepo;
     protected $demandRepo;
-    public function __construct(BillRepositoryInterface $billRepository, DemandRepositoryInterface $demandRepository)
+    protected $vendorRepo;
+
+    public function __construct(BillRepositoryInterface $billRepository,
+                                DemandRepositoryInterface $demandRepository,
+                                VendorRepositoryInterface $vendorRepository
+    )
     {
         $this->demandRepo = $demandRepository;
         $this->billRepo = $billRepository;
+        $this->vendorRepo = $vendorRepository;
     }
 
-    public function postAdd(Request $request, $demandId)
+    public function postAdd(Request $request)
     {
-//        $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
-//        $beautymail->send('admin.email.index', [], function($message) use ($request)
-//        {
-////            $email = $request->get('email');
-//            $message
-//                ->from('donotreply@sharingplace.com')
-//                ->to('doanpham94nd@gmail.com', 'Howdy buddy!')
-//                ->subject('Test Mail!');
-//        });
-//        Mail::send('admin.email.index', function($message){
-//            $message->to('yaphetsss.94@gmail.com', 'Visitor')->subject('Visitor Feedback!');
-//        });
-//        Session::flash('flash_message', 'Send message successfully!');
-        Mail::to('yaphetsss.94@gmail.com')->send(new OrderShipped());
+        $demand = $this->demandRepo->findOnlyPublished($request['demand_id']);
+        $vendor = $this->vendorRepo->findOnlyPublished($request['vendor_id']);
+        Mail::to('yaphetsss.94@gmail.com')->send(new AgreementMail($demand, $vendor));
         return Redirect::back();
     }
 }

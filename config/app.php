@@ -147,6 +147,8 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Snowfire\Beautymail\BeautymailServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        Fedeisas\LaravelMailCssInliner\LaravelMailCssInlinerServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -211,6 +213,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
     ],
+    'PDF' => Barryvdh\DomPDF\Facade::class,
 
     'Prefecture' => [
         'AN-GIANG' => [

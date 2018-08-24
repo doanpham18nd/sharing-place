@@ -22,8 +22,9 @@
                     </div>
                     <!-- /.box-header -->
                     <!-- form start -->
-                    <form class="form-horizontal" method="post" action="{{ route('bill.getAdd', $demand->id) }}">
+                    <form class="form-horizontal" method="post" action="{{ route('bill.postAdd', $demand->id) }}">
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        <input type="hidden" name="demand_id" value="{{ $demand->id }}">
                         <meta name="csrf-token" content="{{ csrf_token() }}">
                         <div class="box-body">
                             <div class="form-group">
