@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\Eloquent\Agreement\AgreementRepositoryInterface;
+use App\Repositories\Eloquent\Demand\DemandRepositoryInterface;
+use App\Repositories\Eloquent\DemandDetail\DemandDetailRepositoryInterface;
 use App\Repositories\Eloquent\District\DistrictRepositoryInterface;
 use App\Repositories\Eloquent\Prefecture\PrefectureRepositoryInterface;
 use App\Repositories\Eloquent\Province\ProvinceRepositoryInterface;
@@ -10,6 +13,7 @@ use App\Repositories\Eloquent\VendorDetail\VendorDetailRepository;
 use App\Repositories\Eloquent\VendorDetail\VendorDetailRepositoryInterface;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class VendorController extends Controller
@@ -26,7 +30,9 @@ class VendorController extends Controller
     protected $prefectureRepo;
 
     protected $vendorDetailRepo;
+    protected $agreementRepo;
 
+    protected $demandRepo;
 
     /**
      * VendorController constructor.
@@ -35,6 +41,8 @@ class VendorController extends Controller
      * @param PrefectureRepositoryInterface $prefectureRepository
      * @param DistrictRepositoryInterface $districtRepository
      * @param VendorDetailRepositoryInterface $vendorDetailRepository
+     * @param DemandRepositoryInterface $demandRepository
+     * @param AgreementRepositoryInterface $agreementRepository
      */
     public function __construct
     (
@@ -42,7 +50,9 @@ class VendorController extends Controller
         ProvinceRepositoryInterface $provinceRepository,
         PrefectureRepositoryInterface $prefectureRepository,
         DistrictRepositoryInterface $districtRepository,
-        VendorDetailRepositoryInterface $vendorDetailRepository
+        VendorDetailRepositoryInterface $vendorDetailRepository,
+        DemandRepositoryInterface $demandRepository,
+        AgreementRepositoryInterface $agreementRepository
     )
     {
         $this->vendorRepo = $vendorRepository;
@@ -50,13 +60,22 @@ class VendorController extends Controller
         $this->districtRepo = $districtRepository;
         $this->prefectureRepo = $prefectureRepository;
         $this->vendorDetailRepo = $vendorDetailRepository;
+        $this->demandRepo = $demandRepository;
+        $this->agreementRepo = $agreementRepository;
+    }
+
+    public function getByAdmin()
+    {
+        $vendors = $this->vendorRepo->getAllPublished();
+        $provinces = $this->provinceRepo->getAllPublished();
+        return view('admin.vendor.index', compact('vendors', 'provinces'));
     }
 
     public function index()
     {
         $vendors = $this->vendorRepo->getAllPublished();
         $provinces = $this->provinceRepo->getAllPublished();
-        return view('admin.vendor.index', compact('vendors', 'provinces'));
+        return view('vendor.index', compact('vendors', 'provinces'));
     }
 
     public function addExtra(Request $request)
@@ -102,5 +121,17 @@ class VendorController extends Controller
             return $exception->getMessage();
         }
 
+    }
+
+    /**
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function confirmAgreement($id)
+    {
+        $agreement = $this->agreementRepo->findByVendorId($id, Auth::user()['id']);
+        $demand = $this->demandRepo->findOnlyPublished($agreement['demand_id']);
+        $vendor = $this->vendorRepo->findOnlyPublished($agreement['vendor_id']);
+        return view('vendor.agreement.confirm', compact('demand', 'vendor','id'));
     }
 }

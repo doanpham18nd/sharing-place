@@ -34,7 +34,7 @@
         <h4 class="red-text text-center font-weight-bold">Kính gửi {{ $vendor->vendor_name }}</h4>
         <h4 class="red-text text-center font-weight-bold">Để xác nhận và thực hiện nhận hợp đồng này.Vui lòng nhấn vào
             link dưới đây</h4>
-        <h4 class="red-text text-center font-weight-bold"><a href="{{ route('vendor.confirm', $demand->id) }}">Xác nhận
+        <h4 class="red-text text-center font-weight-bold"><a href="{{ route('vendor.confirmAgreement', $agreementId) }}">Xác nhận
                 thực hiện hợp đồng</a></h4>
         <h4 class="red-text text-center font-weight-bold">Nội dung hợp đồng có thể xem trước tại đây</h4>
     </div>

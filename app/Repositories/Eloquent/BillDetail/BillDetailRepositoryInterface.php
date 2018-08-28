@@ -6,10 +6,10 @@
  * Time: 7:09 PM
  */
 
-namespace App\Repositories\Eloquent\Bill;
+namespace App\Repositories\Eloquent\BillDetail;
 
 
-interface BillRepositoryInterface
+interface BillDetailRepositoryInterface
 {
 
     /**
@@ -24,7 +24,5 @@ interface BillRepositoryInterface
      * @return mixed
      */
     public function findOnlyPublished($id);
-
-    public function insertBill($data);
 
 }

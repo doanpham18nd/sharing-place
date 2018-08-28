@@ -27,4 +27,6 @@ interface DemandRepositoryInterface
 
     public function getDemandToday();
 
+    public function updateStatus($id, $status);
+
 }

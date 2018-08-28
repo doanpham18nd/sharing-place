@@ -1,4 +1,4 @@
-@extends('admin.component.master')
+@extends('vendor.component.master')
 @section('css')
     <!-- iCheck for checkboxes and radio inputs -->
     <link rel="stylesheet" href="{{ asset('css/admin/all.css') }}">
@@ -22,7 +22,7 @@
                     </div>
                     <!-- /.box-header -->
                     <!-- form start -->
-                    <form class="form-horizontal" method="post" action="{{ route('agreement.postAdd', $demand->id) }}">
+                    <form class="form-horizontal" method="post" action="{{ route('bill.confirmAgreement', $id) }}">
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <input type="hidden" name="demand_id" value="{{ $demand->id }}">
                         <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -77,16 +77,25 @@
                                     <tbody>
                                     <tr>
                                         <td>Tên công ty :</td>
-                                        <td><select class="form-control select2" name="vendor_id" id="vendor_id"
-                                                    data-placeholder="Chọn các việc làm">
-                                                @foreach($vendors as $vendor)
-                                                    <option value="{{ $vendor->id }}">{{ $vendor->vendor_name }}</option>
-                                                @endforeach
-                                            </select>
-                                        </td>
+                                        <td id="vendor_address">{{ $vendor->vendor_name }}</td>
                                     </tr>
-                                    </tbody>
-                                    <tbody id="get_vendor">
+                                    <tr>
+                                        <td>Trụ sở chính :</td>
+                                        <td id="vendor_address">{{ $vendor->address }} - {{ $vendor->prefecture->name }} - {{ $vendor->district->title }} - {{ $vendor->province->title }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Số điện thoại :</td>
+                                        <td id="vendor_phone">0{{ $vendor->vendor_phone }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Email :</td>
+                                        <td id="vendor_email">{{ $vendor->vendor_email }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Tài khoản ngân hàng :</td>
+                                        <td id="vendor_bank">{{ $vendor->vendor_bank }} - Ngân hàng {{ $vendor->bank_name }}</td>
+                                    </tr>
+
                                     </tbody>
                                 </table>
                             </div>
@@ -128,7 +137,7 @@
                                         <td colspan="2"></td>
                                         <td><span style="float: right;">Tổng tiền</span></td>
                                         <td>{{ number_format($demandPriceTotal) }} VNĐ</td>
-                                        <input type="hidden" name="price_total" value="{{ $demandPriceTotal }}">
+                                        <input type="hidden" value="{{ $demandPriceTotal }} " name="price_total">
                                     </tr>
                                     </tbody>
                                 </table>
@@ -236,8 +245,8 @@
                         </div>
                         <!-- /.box-body -->
                         <div class="box-footer">
-                            <button type="submit" class="btn btn-default">Hủy</button>
-                            <button type="submit" class="btn btn-info pull-right">Gửi</button>
+                            <button type="button" class="btn btn-default">Hủy</button>
+                            <button type="submit" class="btn btn-info pull-right">Xác nhận</button>
                         </div>
                         <!-- /.box-footer -->
                     </form>

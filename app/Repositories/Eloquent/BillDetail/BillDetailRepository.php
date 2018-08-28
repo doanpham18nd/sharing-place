@@ -1,13 +1,11 @@
 <?php
 
-namespace App\Repositories\Eloquent\Bill;
+namespace App\Repositories\Eloquent\BillDetail;
 
-use App\Agreement;
-use App\Bill;
+use App\BillDetail;
 use App\Repositories\Eloquent\EloquentRepository;
-use Carbon\Carbon;
 
-class BillRepository extends EloquentRepository implements BillRepositoryInterface
+class BillDetailRepository extends EloquentRepository implements BillDetailRepositoryInterface
 {
 
     /**
@@ -16,7 +14,7 @@ class BillRepository extends EloquentRepository implements BillRepositoryInterfa
      */
     public function getModel()
     {
-        return Bill::class;
+        return BillDetail::class;
     }
 
     /**
@@ -44,18 +42,6 @@ class BillRepository extends EloquentRepository implements BillRepositoryInterfa
             ->first();
 
         return $result;
-    }
-
-    public function insertBill($data)
-    {
-        $bill['client_id'] = $data['client_id'];
-        $bill['vendor_id'] = $data['vendor_id'];
-        $bill['demand_id'] = $data['demand_id'];
-        $bill['price_total'] = $data['price_total'];
-        $bill['created_at'] = Carbon::now();
-        $data['updated_at'] = Carbon::now();
-        $bill['bill_status'] = 1;
-        return $this->model->insertGetId($bill);
     }
 
 }

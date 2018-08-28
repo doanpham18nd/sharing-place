@@ -42,12 +42,20 @@ class DemandRepository extends EloquentRepository implements DemandRepositoryInt
 
     public function getDemandToday()
     {
-        $result = $this->model->with('client')->with('province')->where('specify_time' ,date('Y-m-d'))
-            ->orWhere(function ($query) {
-                $query->where('start_date','<=', date('Y-m-d'))->where('end_date', '>=', date('Y-m-d'));
-            })->where('status', 1)
+        $result = $this->model->with('client')->with('province')
+//            ->where('specify_time' ,date('Y-m-d'))
+//            ->orWhere(function ($query) {
+//                $query->where('start_date','<=', date('Y-m-d'))->where('end_date', '>=', date('Y-m-d'));
+//            })
             ->get();
         return $result;
+    }
+
+    public function updateStatus($id, $status)
+    {
+        $demand = $this->model->find($id);
+        $demand->status = $status;
+        $demand->save();
     }
 
 }

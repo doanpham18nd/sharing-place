@@ -25,4 +25,10 @@ interface AgreementRepositoryInterface
      */
     public function findOnlyPublished($id);
 
+    public function insertAgreement($data);
+
+    public function findByVendorId($id, $vendorId);
+
+    public function updateStatus($id, $status);
+
 }

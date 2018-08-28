@@ -27,7 +27,8 @@
                         <th>Tên khách hàng</th>
                         <th>Nhu cầu</th>
                         <th>Địa chỉ</th>
-                        <th>Thời gian</th>
+                        <th>Thời gian sửa chữa</th>
+                        <th>Trạng thái hợp đồng</th>
                         <th>Tạo hợp đồng</th>
                     </tr>
                     </thead>
@@ -44,9 +45,27 @@
                             <td>{{$demand->address . ' - ' . $demand->prefecture->name . ' - ' . $demand->district->title . ' - ' . $demand->province->title }}</td>
                             <td>
                                 @if(!empty($demand->specify_time)) {{ date("d-m-Y", strtotime($demand->specify_time)) }} @endif
-                                @if(!empty($demand->start_date) && !empty($demand->end_date)) {{ date("d-m-Y", strtotime($demand->start_date)) }} đến {{ date("d-m-Y", strtotime($demand->end_date)) }} @endif
+                                @if(!empty($demand->start_date) && !empty($demand->end_date)) {{ date("d-m-Y", strtotime($demand->start_date)) }}
+                                đến {{ date("d-m-Y", strtotime($demand->end_date)) }} @endif
                             </td>
-                            <td><a class="btn btn-primary" href="{{ route('agreement.postAdd', $demand->id) }}" >Tạo hợp đồng</a></td>
+                            <td>
+                                @if($demand->status == 1)
+                                    Chưa được tạo hợp đồng
+                                @elseif($demand->status == 2)
+                                    Đang đợi xác nhận từ vendor
+                                @elseif($demand->status == 3)
+                                    Đang thực hiện hợp đồng
+                                @else
+                                    Đã hoàn thành hợp đồng
+                                @endif
+                            </td>
+                            <td>
+                                @if($demand->status == 1)
+                                    <a class="btn btn-primary"
+                                       href="{{ route('agreement.getAdd', $demand->id) }}">Tạo hợp
+                                        đồng</a>
+                                @endif
+                            </td>
                         </tr>
                     @endforeach
                     </tbody>

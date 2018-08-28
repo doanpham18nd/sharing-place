@@ -26,21 +26,20 @@
                     <form class="form-horizontal" method="post" action="{{ route('demand.postAdd') }}">
                         <div class="box-body">
                             <div class="form-group">
+                                <label for="vendor_phone1" class="col-sm-2 control-label">Số điện thoại chính</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="client_phone" id="vendor_phone1"
+                                           value="{{ $phone }}"
+                                           placeholder="số điện thoại chính">
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                 <meta name="csrf-token" content="{{ csrf_token() }}">
                                 <label for="inputEmail3" class="col-sm-2 control-label">Tên người dùng</label>
                                 <div class="col-sm-10">
                                     <input type="text" name="client_name" class="form-control" id="inputEmail3"
                                            placeholder="">
-
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="vendor_phone1" class="col-sm-2 control-label">Số điện thoại chính</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" name="client_phone" id="vendor_phone1"
-                                           value="{{ $phone }}"
-                                           placeholder="số điện thoại chính">
                                 </div>
                             </div>
                             <div class="form-group">

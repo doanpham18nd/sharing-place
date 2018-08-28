@@ -14,19 +14,22 @@ class AgreementMail extends Mailable
 
     protected $vendor;
 
+    protected $agreementId;
+
     protected $pdf;
 
     /**
      * Create a new message instance.
      *
+     * @param $agreementId
      * @param $demand
      * @param $vendor
-     * @param PDF $pDF
      */
-    public function __construct($demand, $vendor)
+    public function __construct($agreementId, $demand, $vendor)
     {
         $this->demand = $demand;
         $this->vendor = $vendor;
+        $this->agreementId = $agreementId;
     }
 
     /**
@@ -39,6 +42,7 @@ class AgreementMail extends Mailable
         return $this->view('admin.email.agreement')->subject('THÔNG BÁO THỰC HIỆN HỢP ĐỒNG')->with([
             'demand' => $this->demand,
             'vendor' => $this->vendor,
+            'agreementId' => $this->agreementId
         ]);
     }
 }

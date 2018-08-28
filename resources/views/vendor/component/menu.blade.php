@@ -13,8 +13,8 @@
         </div>
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu" data-widget="tree">
-            <li class="{{  (\Request::route()->getName() == 'admin.index') ? 'active' : '' }}">
-                <a href="{{ route('admin.index') }}">
+            <li class="{{  (\Request::route()->getName() == 'vendor.index') ? 'active' : '' }}">
+                <a href="{{ route('vendor.index') }}">
                     <i class="fa fa-dashboard"></i>
                     <span>Trang chủ</span>
                     <span class="pull-right-container"><span class="label label-primary pull-right">4</span></span>

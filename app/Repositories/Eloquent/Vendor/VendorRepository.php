@@ -38,7 +38,6 @@ class VendorRepository extends EloquentRepository implements VendorRepositoryInt
         $result = $this
             ->model
             ->where('id', $id)
-            ->where('del_flg', 1)
             ->first();
 
         return $result;

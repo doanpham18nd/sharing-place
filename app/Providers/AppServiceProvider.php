@@ -72,5 +72,9 @@ class AppServiceProvider extends ServiceProvider
             \App\Repositories\Eloquent\VendorDetail\VendorDetailRepositoryInterface::class,
             \App\Repositories\Eloquent\VendorDetail\VendorDetailRepository::class
         );
+        $this->app->singleton(
+            \App\Repositories\Eloquent\BillDetail\BillDetailRepositoryInterface::class,
+            \App\Repositories\Eloquent\BillDetail\BillDetailRepository::class
+        );
     }
 }
