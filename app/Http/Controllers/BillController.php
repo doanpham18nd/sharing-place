@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\AgreementMail;
+use App\Mail\BillMail;
 use App\Repositories\Eloquent\Agreement\AgreementRepositoryInterface;
 use App\Repositories\Eloquent\Bill\BillRepositoryInterface;
 use App\Repositories\Eloquent\BillDetail\BillDetailRepositoryInterface;
@@ -56,7 +57,13 @@ class BillController extends Controller
 
     public function getDetail($id)
     {
-        $this->billRepo->findOnlyPublished($id);
-        return view('vendor.bill.detail');
+        $bill = $this->billRepo->findOnlyPublished($id);
+        return view('vendor.bill.detail', compact('bill'));
+    }
+
+    public function postDetail($id)
+    {
+        $bill = $this->billRepo->findOnlyPublished($id);
+        Mail::to('yaphetsss.94@gmail.com')->send(new BillMail($bill));
     }
 }

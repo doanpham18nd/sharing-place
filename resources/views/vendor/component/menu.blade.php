@@ -20,21 +20,21 @@
                     <span class="pull-right-container"><span class="label label-primary pull-right">4</span></span>
                 </a>
             </li>
-            <li class="{{ (\Request::route()->getName() == 'demand.index') || \Request::route()->getName() == 'demand.list'  ? 'active' : '' }} treeview">
+            <li class="{{ (\Request::route()->getName() == 'agreement.index') || \Request::route()->getName() == 'agreement.getAdd'  ? 'active' : '' }} treeview">
                 <a href="#">
-                    <i class="fa fa-dashboard"></i> <span>Nhu cầu</span>
+                    <i class="fa fa-dashboard"></i> <span>Hợp đồng</span>
                     <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li class="{{ (\Request::route()->getName() == 'demand.list') ? 'active' : '' }}"><a href="{{ route('demand.list') }}"><i class="fa fa-circle-o"></i>Nhu cầu hôm nay</a></li>
-                    <li class="{{ (\Request::route()->getName() == 'demand.index') ? 'active' : '' }}"><a href="{{ route('demand.index') }}"><a href="{{ route('demand.index') }}"><i class="fa fa-circle-o"></i>Tạo nhu cầu</a></li>
+                    <li class="{{ (\Request::route()->getName() == 'demand.list') ? 'active' : '' }}"><a href="{{ route('demand.list') }}"><i class="fa fa-circle-o"></i>Danh sách hợp đồng</a></li>
+                    <li class="{{ (\Request::route()->getName() == 'demand.index') ? 'active' : '' }}"><a href="{{ route('demand.index') }}"><i class="fa fa-circle-o"></i>Thống kê</a></li>
                 </ul>
             </li>
-            <li class="{{ (\Request::route()->getName() == 'agreement.index') || \Request::route()->getName() == 'agreement.getAdd'  ? 'active' : '' }} treeview">
+            <li class="{{ (\Request::route()->getName() == '') || \Request::route()->getName() == ''  ? 'active' : '' }} treeview">
                 <a href="#">
-                    <i class="fa fa-dashboard"></i> <span>Hợp đồng</span>
+                    <i class="fa fa-dashboard"></i> <span>Hóa đơn</span>
                     <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>

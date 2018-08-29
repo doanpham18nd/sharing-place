@@ -81,5 +81,6 @@ Route::group(['prefix' => 'company', 'middleware' => 'auth:company'], function (
     Route::get('/confirm-agreement/{agreementId}', 'VendorController@confirmAgreement')->name('vendor.confirmAgreement');
     route::post('/confirm-agreement/{agreementId}', 'BillController@confirmAgreement')->name('bill.confirmAgreement');
     route::get('/bill/detail/{id}', 'BillController@getDetail')->name('company.bill.detail');
+    route::post('/bill/detail/{id}', 'BillController@postDetail')->name('company.bill.postDetail');
 });
 
