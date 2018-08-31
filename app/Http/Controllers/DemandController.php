@@ -138,4 +138,38 @@ class DemandController extends Controller
             compact('district_selected', 'demands', 'prefecture_selected', 'province_selected', 'jobArray', 'jobs', 'stt'));
 
     }
+
+    public function confirming()
+    {
+        $demandData = $this->demandRepo->getConfirm();
+        return view('admin.demand.confirm', compact('demandData'));
+    }
+
+    public function working()
+    {
+        $demandData = $this->demandRepo->getWorking();
+        return view('admin.demand.confirm', compact('demandData'));
+    }
+
+    public function done()
+    {
+        $demandData = $this->demandRepo->getDone();
+        return view('admin.demand.confirm', compact('demandData'));
+    }
+
+    public function cancel()
+    {
+        $demandData = $this->demandRepo->getCancel();
+        return view('admin.demand.confirm', compact('demandData'));
+    }
+
+    public function search()
+    {
+        
+    }
+
+    public function postSearch()
+    {
+        
+    }
 }

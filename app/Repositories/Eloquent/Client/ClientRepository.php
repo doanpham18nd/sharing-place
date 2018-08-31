@@ -44,4 +44,9 @@ class ClientRepository extends EloquentRepository implements ClientRepositoryInt
         return $result;
     }
 
+    public function getByMonth()
+    {
+        return $this->model->whereYear('created_at', date('Y'))->whereMonth('created_at', date('m'))->count();
+    }
+
 }

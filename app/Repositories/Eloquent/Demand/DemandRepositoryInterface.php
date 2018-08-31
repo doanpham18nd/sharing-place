@@ -29,4 +29,14 @@ interface DemandRepositoryInterface
 
     public function updateStatus($id, $status);
 
+    public function getConfirm();
+
+    public function getWorking();
+
+    public function getDone();
+
+    public function getCancel();
+
+    public function getSearch($data);
+
 }

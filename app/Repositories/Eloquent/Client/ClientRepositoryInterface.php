@@ -25,4 +25,6 @@ interface ClientRepositoryInterface
      */
     public function findOnlyPublished($id);
 
+    public function getByMonth();
+
 }

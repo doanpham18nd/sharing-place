@@ -28,12 +28,12 @@
                         <th>Nhu cầu</th>
                         <th>Địa chỉ</th>
                         <th>Thời gian sửa chữa</th>
-                        <th>Trạng thái </th>
-                        <th>Tạo hợp đồng</th>
+                        <th>Trạng thái</th>
+                        <th>Chi tiết</th>
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach($demandListToday as $demand)
+                    @foreach($demandData as $demand)
                         <tr>
                             <td>{{ $demand->client->client_name }}</td>
                             <td>
@@ -60,11 +60,8 @@
                                 @endif
                             </td>
                             <td>
-                                @if($demand->status == 1)
-                                    <a class="btn btn-primary"
-                                       href="{{ route('agreement.getAdd', $demand->id) }}">Tạo hợp
-                                        đồng</a>
-                                @endif
+                                <a class="btn btn-primary"
+                                   href="{{ route('demand.detail', $demand->id) }}">Chi tiết hợp đồng</a>
                             </td>
                         </tr>
                     @endforeach

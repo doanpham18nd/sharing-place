@@ -43,10 +43,10 @@ class DemandRepository extends EloquentRepository implements DemandRepositoryInt
     public function getDemandToday()
     {
         $result = $this->model->with('client')->with('province')
-//            ->where('specify_time' ,date('Y-m-d'))
-//            ->orWhere(function ($query) {
-//                $query->where('start_date','<=', date('Y-m-d'))->where('end_date', '>=', date('Y-m-d'));
-//            })
+            ->where('specify_time', date('Y-m-d'))
+            ->orWhere(function ($query) {
+                $query->where('start_date', '<=', date('Y-m-d'))->where('end_date', '>=', date('Y-m-d'));
+            })
             ->get();
         return $result;
     }
@@ -58,4 +58,28 @@ class DemandRepository extends EloquentRepository implements DemandRepositoryInt
         $demand->save();
     }
 
+    public function getConfirm()
+    {
+        return $this->model->where('status', 2)->get();
+    }
+
+    public function getWorking()
+    {
+        return $this->model->where('status', 3)->get();
+    }
+
+    public function getDone()
+    {
+        return $this->model->where('status', 4)->get();
+    }
+
+    public function getCancel()
+    {
+        return $this->model->where('status', 5)->get();
+    }
+
+    public function getSearch($data)
+    {
+        // TODO: Implement getSearch() method.
+    }
 }

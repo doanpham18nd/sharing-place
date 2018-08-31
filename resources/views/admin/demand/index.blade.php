@@ -152,7 +152,7 @@
                                 <label for="" class="col-sm-2 control-label">
                                     <button type="button" class="btn btn-primary" data-toggle="modal" id="add_extra"
                                             data-target="#modal-default">
-                                        Thêm chi nhánh phụ
+                                        Thêm nhu cầu
                                     </button>
                                 </label>
                             </div>

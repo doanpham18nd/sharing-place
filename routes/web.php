@@ -28,6 +28,9 @@ Route::post('admin/login', 'AuthAdmin\LoginController@login')->name('admin.login
 Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     Route::get('/', 'AdminController@index')->name('admin.index');
     Route::get('/logout', 'AuthAdmin\LoginController@logout')->name('admin.logout');
+    Route::prefix('client')->group(function () {
+        Route::get('/', 'ClientController@getByMonth')->name('client.index');
+    });
     Route::prefix('company')->group(function () {
         Route::get('/', 'VendorController@getByAdmin')->name('company.index');
         Route::post('/add-extra-vendor-info', 'VendorController@addExtra')->name('vendor.addExtraVendorInfo');
@@ -35,14 +38,22 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
         Route::post('/get-extra', 'VendorController@getExtra')->name('vendor.getExtra');
     });
     Route::prefix('demand')->group(function () {
-        Route::get('/list', 'DemandController@getList')->name('demand.list');
-        Route::get('/{user_phone?}', 'DemandController@index')->name('demand.index');
+        Route::get('list', 'DemandController@getList')->name('demand.list');
+        Route::get('detail/{id}', 'DemandController@getList')->name('demand.detail');
+        Route::get('/add', 'DemandController@index')->name('demand.index');
         Route::post('district/get', 'DemandController@getDistrict')->name('demand.getDistrict');
         Route::post('prefecture/get', 'DemandController@getPrefecture')->name('demand.getPrefecture');
         Route::post('add', 'DemandController@postAdd')->name('demand.postAdd');
-        Route::post('/add-extra-demand-address', 'DemandController@addExtra')->name('demand.addExtraAddress');
+        Route::post('add-extra-demand-address', 'DemandController@addExtra')->name('demand.addExtraAddress');
+        Route::get('confirming', 'DemandController@confirming')->name('demand.confirming');
+        Route::get('working', 'DemandController@working')->name('demand.working');
+        Route::get('done', 'DemandController@done')->name('demand.done');
+        Route::get('cancel', 'DemandController@cancel')->name('demand.cancel');
+        Route::get('search', 'DemandController@search')->name('demand.search');
+        Route::post('search', 'DemandController@postSearch')->name('demand.postSearch');
     });
     Route::prefix('agreement')->group(function () {
+        Route::get('/', 'AgreementController@index')->name('agreement.index');
         Route::get('add/{demandId?}', 'AgreementController@getAdd')->name('agreement.getAdd');
         Route::post('get-vendor', 'AgreementController@getVendor')->name('agreement.getVendor');
         Route::post('add/{demandId}', 'AgreementController@postAdd')->name('agreement.postAdd');
@@ -73,8 +84,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
 
 
 //company/vendor
-Route::get('vendor/login', 'AuthVendor\LoginController@showLoginForm')->name('vendor.login');
-Route::post('vendor/login', 'AuthVendor\LoginController@login')->name('vendor.login.submit');
+Route::get('company/login', 'AuthVendor\LoginController@showLoginForm')->name('vendor.login');
+Route::post('company/login', 'AuthVendor\LoginController@login')->name('vendor.login.submit');
 Route::group(['prefix' => 'company', 'middleware' => 'auth:company'], function () {
     Route::get('/', 'VendorController@index')->name('vendor.index');
     Route::get('/logout', 'AuthVendor\LoginController@logout')->name('vendor.logout');
